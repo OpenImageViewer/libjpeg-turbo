@@ -1534,7 +1534,7 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/jconfig.h
   ${CMAKE_CURRENT_SOURCE_DIR}/jpeglib.h
   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
   ]]
-include(cmakescripts/BuildPackages.cmake)
+#include(cmakescripts/BuildPackages.cmake)
 
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/cmakescripts/cmake_uninstall.cmake.in"
   "cmake_uninstall.cmake" IMMEDIATE @ONLY)
