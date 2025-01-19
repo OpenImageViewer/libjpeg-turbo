@@ -57,9 +57,9 @@ endif()
 # ExternalProject_Add() or make downstream modifications to the libjpeg-turbo
 # build system to suit their specific needs.  Please do not file bug reports,
 # feature requests, or pull requests regarding this.
-if(NOT CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
-  message(FATAL_ERROR "The libjpeg-turbo build system cannot be integrated into another build system using add_subdirectory().  Use ExternalProject_Add() instead.")
-endif()
+#if(NOT CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+  #message(FATAL_ERROR "The libjpeg-turbo build system cannot be integrated into another build system using add_subdirectory().  Use ExternalProject_Add() instead.")
+#endif()
 
 # CMake 3.14 and later sets CMAKE_MACOSX_BUNDLE to TRUE by default when
 # CMAKE_SYSTEM_NAME is iOS, tvOS, or watchOS, which breaks the libjpeg-turbo
@@ -691,10 +691,10 @@ if(WITH_TURBOJPEG)
       set(TJMAPFILE ${CMAKE_CURRENT_SOURCE_DIR}/turbojpeg-mapfile.jni)
     endif()
     if(MSVC_LIKE)
-      configure_file(${CMAKE_SOURCE_DIR}/win/turbojpeg.rc.in
-        ${CMAKE_BINARY_DIR}/win/turbojpeg.rc)
+         configure_file(${CMAKE_CURRENT_SOURCE_DIR}/win/turbojpeg.rc.in
+        ${CMAKE_CURRENT_BINARY_DIR}/win/turbojpeg.rc)
       set(TURBOJPEG_SOURCES ${TURBOJPEG_SOURCES}
-        ${CMAKE_BINARY_DIR}/win/turbojpeg.rc)
+        ${CMAKE_CURRENT_BINARY_DIR}/win/turbojpeg.rc)
     endif()
     add_library(turbojpeg12 OBJECT rdppm.c wrppm.c)
     set_property(TARGET turbojpeg12 PROPERTY COMPILE_FLAGS
@@ -727,7 +727,7 @@ if(WITH_TURBOJPEG)
       set_target_properties(turbojpeg PROPERTIES
         LINK_FLAGS "${TJMAPFLAG}${TJMAPFILE}")
     endif()
-
+    #[[
     add_executable(tjunittest tjunittest.c tjutil.c md5/md5.c md5/md5hl.c)
     target_link_libraries(tjunittest turbojpeg)
 
@@ -742,8 +742,9 @@ if(WITH_TURBOJPEG)
 
     add_custom_target(tjdoc COMMAND doxygen -s doxygen.config
       WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+      #]]
   endif()
-
+    
   if(ENABLE_STATIC)
     add_library(turbojpeg12-static OBJECT rdppm.c wrppm.c)
     set_property(TARGET turbojpeg12-static PROPERTY COMPILE_FLAGS
@@ -761,7 +762,7 @@ if(WITH_TURBOJPEG)
     if(NOT MSVC_LIKE)
       set_target_properties(turbojpeg-static PROPERTIES OUTPUT_NAME turbojpeg)
     endif()
-
+    #[[
     add_executable(tjunittest-static tjunittest.c tjutil.c md5/md5.c
       md5/md5hl.c)
     target_link_libraries(tjunittest-static turbojpeg-static)
@@ -771,6 +772,7 @@ if(WITH_TURBOJPEG)
     if(UNIX)
       target_link_libraries(tjbench-static m)
     endif()
+    #]]
   endif()
 endif()
 
@@ -819,9 +821,9 @@ if(ENABLE_STATIC)
   target_link_libraries(example-static jpeg-static)
 endif()
 
-add_executable(rdjpgcom rdjpgcom.c)
+#add_executable(rdjpgcom rdjpgcom.c)
 
-add_executable(wrjpgcom wrjpgcom.c)
+#add_executable(wrjpgcom wrjpgcom.c)
 
 
 ###############################################################################
@@ -832,9 +834,8 @@ if(WITH_FUZZ)
   add_subdirectory(fuzz)
 endif()
 
-add_executable(strtest strtest.c)
-
-add_subdirectory(md5)
+#add_executable(strtest strtest.c)
+#add_subdirectory(md5)
 
 if(GENERATOR_IS_MULTI_CONFIG)
   set(OBJDIR "\${CTEST_CONFIGURATION_TYPE}/")
@@ -1739,7 +1740,7 @@ endif()
 ###############################################################################
 
 set(EXE ${CMAKE_EXECUTABLE_SUFFIX})
-
+#[[
 if(WITH_TURBOJPEG)
   if(ENABLE_SHARED)
     install(TARGETS turbojpeg EXPORT ${CMAKE_PROJECT_NAME}Targets
@@ -1837,7 +1838,7 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/jconfig.h
   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} COMPONENT include)
 
 include(cmakescripts/BuildPackages.cmake)
-
+]]
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/cmakescripts/cmake_uninstall.cmake.in"
   "cmake_uninstall.cmake" IMMEDIATE @ONLY)
 

@@ -44,9 +44,9 @@ if(WIN32)
   set(DEFFILE ../win/jpeg${SO_MAJOR_VERSION}.def)
 endif()
 if(MSVC_LIKE)
-  configure_file(${CMAKE_SOURCE_DIR}/win/jpeg.rc.in
-    ${CMAKE_BINARY_DIR}/win/jpeg.rc)
-  set(JPEG_SRCS ${JPEG_SRCS} ${CMAKE_BINARY_DIR}/win/jpeg.rc)
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../win/jpeg.rc.in
+    ${CMAKE_CURRENT_BINARY_DIR}/win/jpeg.rc)
+  set(JPEG_SRCS ${JPEG_SRCS} ${CMAKE_CURRENT_BINARY_DIR}/win/jpeg.rc)
 endif()
 add_library(jpeg SHARED ${JPEG_SRCS} ${DEFFILE} ${SIMD_TARGET_OBJECTS}
   ${SIMD_OBJS} $<TARGET_OBJECTS:jpeg12> $<TARGET_OBJECTS:jpeg16>)
@@ -88,6 +88,7 @@ set(CDJPEG_COMPILE_FLAGS
 
 # Compile a separate version of these source files with 12-bit and 16-bit data
 # precision.
+#[[
 add_library(cjpeg12 OBJECT ../rdgif.c ../rdppm.c)
 set_property(TARGET cjpeg12 PROPERTY COMPILE_FLAGS
   "-DBITS_IN_JSAMPLE=12 -DGIF_SUPPORTED -DPPM_SUPPORTED")
@@ -136,3 +137,5 @@ if(NOT CMAKE_VERSION VERSION_LESS "3.1" AND MSVC_LIKE AND
   install(FILES "$<TARGET_PDB_FILE:jpeg>"
     DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT bin OPTIONAL)
 endif()
+]]#
+
